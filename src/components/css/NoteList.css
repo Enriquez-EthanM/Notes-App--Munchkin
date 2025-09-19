@@ -1,0 +1,16 @@
+.note-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 600px;
+  margin: 20px auto;   
+  max-height: 200px;   
+  overflow-y: scroll;    
+  padding-right: 8px;
+}
+
+.empty-message {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+}

@@ -1,0 +1,22 @@
+.notes-page {
+  display: grid;
+  grid-template-columns: 1fr 2fr; 
+  gap: 20px;
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.notes-form-section {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.notes-list-section {
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
