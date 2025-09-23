@@ -13,11 +13,13 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  min-height: 300px;
   text-align: left;
 }
 
 .note-title {
   margin: 0 0 5px 0;
+  color: #555;
   font-size: 1.1rem;
   font-weight: bold;
 }
@@ -38,6 +40,12 @@
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s ease;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-align: center;
+  display: inline-block;
 }
 .edit-btn:hover {
   background-color: #e0a800;
@@ -52,6 +60,12 @@
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s ease;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-align: center;
+  display: inline-block;
 }
 
 .delete-btn:hover {
