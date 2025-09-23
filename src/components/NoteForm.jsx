@@ -1,14 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './css/NoteForm.css'
-function NoteForm({ addNote }) {
+
+function NoteForm({ addNote, updateNote, editingNote }) {
   const [noteContent, setNoteContent] = useState("");
   const [noteTitle, setNoteTitle] = useState("");
+
+  useEffect(() => {
+    if (editingNote) {
+      setNoteContent(editingNote.content);
+      setNoteTitle(editingNote.title);
+    } else {
+      setNoteContent("");
+      setNoteTitle("");
+    }
+  }, [editingNote]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!noteContent.trim() || !noteTitle.trim()) return;
 
-    addNote({ title: noteTitle, content: noteContent });
+    if (editingNote) {
+      updateNote({
+        ...editingNote,
+        title: noteTitle,
+        content: noteContent,
+      });
+    } else {
+      addNote({ title: noteTitle, content: noteContent });
+    }
     setNoteContent("");
     setNoteTitle("");
   };
@@ -26,7 +45,7 @@ function NoteForm({ addNote }) {
         onChange={(e) => setNoteContent(e.target.value)}
         placeholder="Write a note..."
       />
-      <button type="submit">Add Note</button>
+      <button type="submit">{editingNote ? "Update Note" : "Add Note"}</button>
     </form>
   );
 }

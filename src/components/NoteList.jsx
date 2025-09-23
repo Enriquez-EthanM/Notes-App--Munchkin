@@ -1,14 +1,19 @@
 import NoteItem from "./NoteItem";
 import "./css/NoteList.css";
 
-function NoteList({ notes, deleteNote }) {
+function NoteList({ notes, deleteNote, startEditNote }) {
   return (
     <div className="note-list">
       {notes.length === 0 ? (
         <p className="empty-message">No notes yet. Add one!</p>
       ) : (
         notes.map((note) => (
-          <NoteItem key={note.id} note={note} deleteNote={deleteNote} />
+          <NoteItem
+            key={note.id}
+            note={note}
+            deleteNote={deleteNote}
+            startEditNote={startEditNote}
+          />
         ))
       )}
     </div>
