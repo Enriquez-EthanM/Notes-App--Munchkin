@@ -1,0 +1,4 @@
+
+.favorites-page { display: flex; flex-direction: column; gap: 12px; }
+.favorites-page h2 { margin: 0; color: var(--heading, #1f2937); }
+.empty { color: #94a3b8; } 

@@ -1,73 +1,83 @@
+/* Card */
 .note-item {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  background: #f8f9fa;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 15px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(4px);
+  transition: transform 0.08s ease, box-shadow 0.2s ease;
 }
 
+.note-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+}
+
+/* Content */
 .note-content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  min-height: 300px;
   text-align: left;
+  gap: 6px;
 }
 
 .note-title {
-  margin: 0 0 5px 0;
-  color: #555;
+  margin: 0;
+  color: #0f172a;
   font-size: 1.1rem;
-  font-weight: bold;
+  font-weight: 800;
 }
 
 .note-text {
   margin: 0;
-  color: #555;
-  font-size: 0.95rem;
+  color: #334155;
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+/* Buttons */
+.edit-btn,
+.delete-btn,
+.fav-btn {
+  margin-left: 8px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
 
 .edit-btn {
-  margin-right: 8px;
-  padding: 6px 12px;
-  font-size: 0.9rem;
-  background-color: #ffc107;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  writing-mode: horizontal-tb !important;
-  text-orientation: mixed !important;
-  white-space: nowrap !important;
-  overflow: hidden;
-  text-align: center;
-  display: inline-block;
+  background: linear-gradient(135deg, #fde68a 0%, #f59e0b 100%);
+  color: #0b0b0b;
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
 }
-.edit-btn:hover {
-  background-color: #e0a800;
-}
+
+.edit-btn:hover { box-shadow: 0 8px 20px rgba(245, 158, 11, 0.35); }
 
 .delete-btn {
-  padding: 6px 12px;
-  font-size: 0.9rem;
-  background-color: #dc3545;
+  background: linear-gradient(135deg, #fda4af 0%, #ef4444 100%);
   color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  writing-mode: horizontal-tb !important;
-  text-orientation: mixed !important;
-  white-space: nowrap !important;
-  overflow: hidden;
-  text-align: center;
-  display: inline-block;
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.25);
 }
 
-.delete-btn:hover {
-  background-color: #c82333;
+.delete-btn:hover { box-shadow: 0 8px 20px rgba(239, 68, 68, 0.35); }
+
+.fav-btn {
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #93c5fd 0%, #6366f1 100%);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.25);
 }
+.fav-btn:hover { box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35); }
+
+.edit-btn:active,
+.delete-btn:active,
+.fav-btn:active { transform: translateY(1px); }

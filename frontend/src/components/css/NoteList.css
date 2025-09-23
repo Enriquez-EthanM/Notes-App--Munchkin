@@ -1,16 +1,18 @@
+/* List wrapper */
 .note-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  max-width: 600px;
-  margin: 20px auto;
+  gap: 14px;
+  max-width: 100%;
+  margin: 0;
   max-height: none;
   overflow-y: auto;
-  padding-right: 8px;
+  padding-right: 6px;
 }
 
+/* Empty text */
 .empty-message {
   text-align: center;
-  color: #888;
-  font-style: italic;
+  color: #94a3b8;
+  font-style: normal;
 }
