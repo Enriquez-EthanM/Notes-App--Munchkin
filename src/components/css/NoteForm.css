@@ -17,7 +17,8 @@
 
 .note-form textarea {
   resize: vertical;
-  min-height: 80px;
+  min-height: 300px;
+  height: 180px;
 }
 
 .note-form button {
