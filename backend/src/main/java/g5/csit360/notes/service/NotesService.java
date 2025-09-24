@@ -1,14 +1,17 @@
-package main.java.g5.csit360.notes.service;
+package g5.csit360.notes.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import main.java.g5.csit360.notes.entity.NotesEntity;
+import g5.csit360.notes.entity.NotesEntity;
+import g5.csit360.notes.repository.NotesRepository;
 
 @Service
 public class NotesService {
-    private final NotesRepository notesRepository;
+    @Autowired
+    NotesRepository notesRepository;
 
     public List<NotesEntity> getAllNotes() {
         return notesRepository.findAll();

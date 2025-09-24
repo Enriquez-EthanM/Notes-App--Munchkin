@@ -1,9 +1,8 @@
-package main.java.g5.csit360.notes.entity;
+package g5.csit360.notes.entity;
 
 import java.time.LocalDateTime;
 
-import org.springframework.stereotype.Entity;
-import org.springframework.lang.NonNull;
+import org.springframework.lang.*;
 
 import jakarta.persistence.*;
 

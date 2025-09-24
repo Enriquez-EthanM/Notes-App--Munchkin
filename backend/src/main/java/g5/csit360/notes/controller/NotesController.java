@@ -1,11 +1,19 @@
-package main.java.g5.csit360.notes.controller;
+package g5.csit360.notes.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import g5.csit360.notes.entity.NotesEntity;
+import g5.csit360.notes.service.NotesService;
 
 @RestController
 @RequestMapping("/api/notes")
 public class NotesController {
-    private final NotesService notesService;
+    @Autowired
+    NotesService notesService;
 
     @GetMapping
     public ResponseEntity<List<NotesEntity>> getAllNotes() {
