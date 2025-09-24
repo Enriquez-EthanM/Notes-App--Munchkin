@@ -8,6 +8,7 @@ public class NotesApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(NotesApplication.class, args);
+		System.out.println("MUNCHKIN NOTES: Ze blutooth device has connected successfully.");
 	}
 
 }
