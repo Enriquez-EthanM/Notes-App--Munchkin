@@ -1,0 +1,65 @@
+/* Container */
+.navbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  margin-bottom: 14px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 14px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+.nav-left { display: flex; align-items: center; gap: 16px; }
+
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-dot { width: 12px; height: 12px; border-radius: 50%; background: linear-gradient(135deg,#60a5fa,#8b5cf6); box-shadow: 0 0 0 3px rgba(99,102,241,0.18); }
+.brand-text { font-weight: 800; color: #4338ca; letter-spacing: .3px; }
+
+.nav-links { display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; }
+.nav-links a {
+  display: inline-block;
+  padding: 8px 12px;
+  color: #334155;
+  text-decoration: none;
+  font-weight: 700;
+  border-radius: 10px;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+.nav-links a:hover { background: rgba(99,102,241,0.08); box-shadow: inset 0 0 0 1px rgba(99,102,241,0.18); }
+.nav-links a.active { color: #4338ca; background: rgba(99,102,241,0.12); box-shadow: inset 0 0 0 1px rgba(99,102,241,0.22); }
+
+.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-right .cta {
+  display: inline-block;
+  padding: 8px 14px;
+  font-weight: 800;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #60a5fa 0%, #6366f1 50%, #8b5cf6 100%);
+  box-shadow: 0 8px 20px rgba(99,102,241,0.25);
+}
+.nav-right .cta:hover { box-shadow: 0 10px 24px rgba(99,102,241,0.32); }
+
+.ghost-toggle {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(99,102,241,0.1);
+  color: #4338ca;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* Dark theme base hook */
+body.dark {
+  --heading: #e5e7eb;
+}
+body.dark .navbar { background: rgba(17, 24, 39, 0.6); border-color: rgba(55,65,81,0.6); box-shadow: 0 10px 24px rgba(0,0,0,0.4); }
+body.dark .nav-links a { color: #e5e7eb; }
+body.dark .nav-links a.active { color: #c7d2fe; background: rgba(99,102,241,0.18); }
+body.dark .ghost-toggle { background: rgba(99,102,241,0.18); color: #c7d2fe; } 

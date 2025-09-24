@@ -9,6 +9,8 @@ function NotesPage({
   editingNote,
   startEditNote,
   updateNote,
+  toggleFavorite,
+  confirmDelete,
 }) {
   return (
     <div className="notes-page">
@@ -26,6 +28,8 @@ function NotesPage({
           notes={notes}
           deleteNote={deleteNote}
           startEditNote={startEditNote}
+          toggleFavorite={toggleFavorite}
+          confirmDelete={confirmDelete}
         />
       </div>
     </div>
