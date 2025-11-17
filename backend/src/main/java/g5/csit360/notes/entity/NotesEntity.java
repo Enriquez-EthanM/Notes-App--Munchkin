@@ -27,6 +27,13 @@ public class NotesEntity {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Column(name = "favorite")
+    private Boolean favorite = false;
+
+    @Column(name = "trashed")
+    private Boolean trashed = false;
+    
     //Timestamp issue fix
     @PrePersist
     protected void onCreate() {

@@ -1,8 +1,16 @@
 import NoteList from "../components/NoteList";
+import { useNavigate } from "react-router-dom";
 import "./css/Favorites.css";
 
 function Favorites({ notes, deleteNote, startEditNote, toggleFavorite }) {
-  const favorites = notes.filter(n => n.favorite && !n.deletedAt);
+  const navigate = useNavigate();
+  const favorites = notes.filter(n => n.favorite);
+  
+  const handleEditNote = (note) => {
+    startEditNote(note);
+    navigate('/notes');
+  };
+  
   return (
     <div className="favorites-page">
       <h2>Favorites</h2>
@@ -12,7 +20,7 @@ function Favorites({ notes, deleteNote, startEditNote, toggleFavorite }) {
         <NoteList
           notes={favorites}
           deleteNote={deleteNote}
-          startEditNote={startEditNote}
+          startEditNote={handleEditNote}
           toggleFavorite={toggleFavorite}
           context="favorites"
         />
