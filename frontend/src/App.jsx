@@ -1,3 +1,4 @@
+import { Blaze, Blockfrost, Core, WebWallet } from '@blaze-cardano/sdk';
 import NoteForm from './components/NoteForm';
 import NoteList from './components/NoteList';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -11,6 +12,16 @@ import Trash from './pages/Trash';
 
 function App() {
   const [notes, setNotes] = useState([]);
+  const [wallets, setWallets] = useState([]);
+  const [walletApi, setWalletApi] = useState(null)
+  const [selectedWallet, setSelectedWallet] = useState('')
+  const [walletAddress, setWalletAddress] = useState('')
+  const [recipient, setRecipient] = useState('')
+  const [amount, setAmount] = useState(0n)
+  const [provider] = useState(() => new Blockfrost({
+    network: 'cardano-preview',
+    projectId: import.meta.env.VITE_BLOCKFROST_PROJECT_ID,
+  }))
   const [editingNote, setEditingNote] = useState(null);
   const [dark, setDark] = useState(false);
 
@@ -18,7 +29,74 @@ function App() {
   useEffect(() => {
     if (dark) document.body.classList.add('dark');
     else document.body.classList.remove('dark');
+
+    if(window.cardano) {
+      setWallets(Object.keys(window.cardano));
+    }
   }, [dark]);
+
+  const handleWalletChange = async (event) => {
+    const walletName = event.target.value
+    setSelectedWallet(walletName)
+  }
+
+  const handleConnectWallet = async () => {
+    console.log('Connecting to wallet:', selectedWallet)
+    if (selectedWallet && window.cardano[selectedWallet]) {
+      try {
+        const api = await window.cardano[selectedWallet].enable()
+        setWalletApi(api)
+        console.log('Connected to wallet API:', api)
+
+        const address = await api.getChangeAddress();
+        console.log('Wallet address:', address)
+        setWalletAddress(address)
+      } catch (error) {
+        console.error('Error connecting to wallet:', error)
+      }
+    }
+  }
+
+  const handleRecipientChange = (event) => {
+    setRecipient(event.target.value)
+  }
+
+  const handleAmountChange = (event) => {
+    setAmount(BigInt(event.target.value))
+  }
+
+  const handleSubmitTransaction = async () => {
+    if (walletApi) {
+      try {
+        const wallet = new WebWallet(walletApi)
+        const blaze = await Blaze.from(provider, wallet)
+        console.log('Blaze instance created:', blaze)
+
+        const bech32Address = Core.Address.fromBytes(Buffer.from(walletAddress, 'hex')).toBech32()
+        console.log('Recipient address (bech32):', bech32Address)
+
+        const tx = await blaze
+          .newTransaction()
+          .payLovelace(
+            Core.Address.fromBech32(recipient),
+            amount
+          )
+          .complete()
+
+        console.log('Transaction built:', tx.toCbor())
+
+        const signedTx = await blaze.signTransaction(tx)
+
+        console.log('Transaction signed:', signedTx.toCbor())
+
+        const txHash = await blaze.provider.postTransactionToChain(signedTx)
+        
+        console.log('Transaction submitted. Hash:', txHash)
+      } catch (error) {
+        console.error('Error submitting transaction:', error)
+      }
+    }
+  }
 
   const addNote = (note) => {
     const now = Date.now();
