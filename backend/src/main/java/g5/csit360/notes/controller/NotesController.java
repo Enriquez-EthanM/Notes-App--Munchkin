@@ -17,7 +17,13 @@ public class NotesController {
 
     @GetMapping
     public ResponseEntity<List<NotesEntity>> getAllNotes() {
-        return ResponseEntity.ok(notesService.getAllNotes());
+        try {
+            List<NotesEntity> notes = notesService.getAllNotes();
+            return ResponseEntity.ok(notes); // Will be an empty list if no rows exist
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
 
     @GetMapping("/{id}")

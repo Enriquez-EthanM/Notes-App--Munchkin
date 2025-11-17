@@ -1,7 +1,7 @@
 import NoteItem from "./NoteItem";
 import "./css/NoteList.css";
 
-function NoteList({ notes, deleteNote, startEditNote, toggleFavorite, confirmDelete, context }) {
+function NoteList({ notes = [], deleteNote, startEditNote, context }) {
   return (
     <div className="note-list">
       {notes.length === 0 ? (
@@ -13,9 +13,6 @@ function NoteList({ notes, deleteNote, startEditNote, toggleFavorite, confirmDel
             note={note}
             deleteNote={deleteNote}
             startEditNote={startEditNote}
-            toggleFavorite={toggleFavorite}
-            confirmDelete={confirmDelete}
-            context={context}
           />
         ))
       )}

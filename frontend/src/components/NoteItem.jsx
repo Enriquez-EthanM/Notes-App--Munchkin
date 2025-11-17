@@ -1,6 +1,6 @@
 import "./css/NoteItem.css";
 
-function NoteItem({ note, deleteNote, startEditNote, toggleFavorite, confirmDelete }) {
+function NoteItem({ note, deleteNote, startEditNote,}) {
   return (
     <div className="note-item">
       <div className="note-content">
@@ -14,7 +14,7 @@ function NoteItem({ note, deleteNote, startEditNote, toggleFavorite, confirmDele
         <button className="fav-btn" onClick={() => toggleFavorite(note.id)} title={note.favorite ? "Unfavorite" : "Favorite"}>
           {note.favorite ? "★" : "☆"}
         </button>
-        <button className="delete-btn" onClick={() => confirmDelete(note.id)}>
+        <button className="delete-btn" onClick={() => deleteNote(note.id)}>
           Delete
         </button>
       </div>
