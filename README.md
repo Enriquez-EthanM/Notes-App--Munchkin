@@ -20,7 +20,7 @@ cd NotesApp-Munchkin
 2. Backend Setup (Spring Boot)
 Open the backend project in your IDE (IntelliJ, VSCode, etc.)
 Configure application.properties with your MySQL credentials:
-```
+```java
 spring.datasource.url=jdbc:mysql://localhost:3306/notes_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
 spring.datasource.username=<your username>
 spring.datasource.password=<your password>
@@ -39,7 +39,7 @@ npm run dev
 
 
 MySQL Workbench DB Initialization(OPTIONAL)
-```
+```sql
 CREATE DATABASE notes_db;
 USE notes_db;
 
