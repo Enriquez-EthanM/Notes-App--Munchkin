@@ -1,60 +1,53 @@
 import { useState, useEffect } from "react";
 import './css/NoteForm.css'
 
-function NoteForm({ addNote, updateNote, editingNote }) {
-  const [noteContent, setNoteContent] = useState("");
-  const [noteTitle, setNoteTitle] = useState("");
-  const [favorite, setFavorite] = useState(false);
+function NoteForm({ addNote, updateNoteProp, editingNote }) {
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
 
   useEffect(() => {
     if (editingNote) {
-      setNoteContent(editingNote.content);
-      setNoteTitle(editingNote.title);
-      setFavorite(!!editingNote.favorite);
+      setTitle(editingNote.title);
+      setContent(editingNote.content);
     } else {
-      setNoteContent("");
-      setNoteTitle("");
-      setFavorite(false);
+      setTitle("");
+      setContent("");
     }
   }, [editingNote]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!noteContent.trim() || !noteTitle.trim()) return;
+    const note = {
+      title,
+      content
+    };
 
     if (editingNote) {
-      updateNote({
-        ...editingNote,
-        title: noteTitle,
-        content: noteContent,
-        favorite: !!favorite,
-      });
+      updateNoteProp(editingNote.id, note);
     } else {
-      addNote({ title: noteTitle, content: noteContent, favorite: !!favorite });
+      addNote(note);
     }
-    setNoteContent("");
-    setNoteTitle("");
-    setFavorite(false);
+
+
+    setTitle("");
+    setContent("");
   };
 
   return (
     <form className="note-form" onSubmit={handleSubmit}>
       <input
         type="text"
-        value={noteTitle}
-        onChange={(e) => setNoteTitle(e.target.value)}
-        placeholder="What's the title..."
+        placeholder="Title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        required
       />
       <textarea
-        value={noteContent}
-        onChange={(e) => setNoteContent(e.target.value)}
-        placeholder="Write a note..."
+        placeholder="Content"
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
       />
-      <label style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#334155', fontWeight: 600 }}>
-        <input type="checkbox" checked={favorite} onChange={(e)=>setFavorite(e.target.checked)} />
-        Mark as favorite
-      </label>
-      <button type="submit">{editingNote ? "Update Note" : "Add Note"}</button>
+      <button type="submit">{editingNote ? "Update" : "Add"}</button>
     </form>
   );
 }

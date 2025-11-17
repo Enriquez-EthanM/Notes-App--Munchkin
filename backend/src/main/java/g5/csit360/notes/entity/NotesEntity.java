@@ -2,7 +2,7 @@ package g5.csit360.notes.entity;
 
 import java.time.LocalDateTime;
 
-import org.springframework.lang.*;
+import org.springframework.lang.Nullable;
 
 import jakarta.persistence.*;
 
@@ -16,16 +16,26 @@ public class NotesEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NonNull
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String title;
 
     @Nullable
     private String content;
 
-    @NonNull
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @NonNull
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    //Timestamp issue fix
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }
