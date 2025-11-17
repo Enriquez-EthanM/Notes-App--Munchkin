@@ -26,6 +26,9 @@ public class NotesService {
     }
 
     public NotesEntity createNote(NotesEntity note) {
+        System.out.println("Received note: " + note.getTitle());
+        System.out.println("Received content: " + note.getContent());
+        System.out.println("Received txHash: " + note.getTxHash());
         return notesRepository.save(note);
     }
 

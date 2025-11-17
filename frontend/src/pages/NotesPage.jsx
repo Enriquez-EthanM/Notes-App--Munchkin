@@ -1,21 +1,19 @@
 import NoteForm from "../components/NoteForm";
 import NoteList from "../components/NoteList";
 import "./css/NotesPage.css";
-import { useEffect,useState } from "react";
-import {getNotes, createNote, updateNote, deleteNote} from "../service/notesServices";
+import { useEffect, useState } from "react";
+import { getNotes, createNote, updateNote, deleteNote } from "../service/notesServices";
 
-
-function NotesPage() {
+function NotesPage({ initialNotes, addNote }) {
   const [notes, setNotes] = useState([]);
   const [editingNote, setEditingNote] = useState(null);
 
-  
-  //FETCH call every render/page reload
+  // FETCH call every render/page reload
   useEffect(() => {
     async function loadNotes() {
       try {
         const data = await getNotes();
-        setNotes(data); //fix issue where notes array population ma delete taga reload
+        setNotes(data); // Populate the internal state variable notes
       } catch (err) {
         console.error("Failed to load notes:", err);
       }
@@ -24,17 +22,7 @@ function NotesPage() {
     loadNotes();
   }, []);
 
-  //CREATE call
-  const addNote = async(note) => {
-    try{
-      const newNote = await createNote(note);
-      setNotes((prev) => [...prev, newNote]);
-    }catch(error){
-      console.error (error)
-    }
-  }
-
-  //PUT call
+  // PUT call
   const updateExistingNote = async (id, note) => {
     try {
       const updated = await updateNote(id, note);
@@ -45,7 +33,7 @@ function NotesPage() {
     }
   };
 
-  //DELETE call
+  // DELETE call
   const removeNote = async (id) => {
     try {
       await deleteNote(id);
@@ -62,22 +50,21 @@ function NotesPage() {
       <div className="notes-form-section">
         <h2>{editingNote ? "Edit Note" : "Add a Note"}</h2>
         <NoteForm
-          addNote={addNote}
+          addNote={addNote} // Use addNote passed from props
           updateNoteProp={updateExistingNote}
           editingNote={editingNote}
         />
       </div>
       <div className="notes-list-section">
         <h2>Your Notes</h2>
-          <NoteList
-            notes={notes}
-            deleteNote={removeNote}
-            startEditNote={startEditNote}
-          />
+        <NoteList
+          notes={notes}
+          deleteNote={removeNote}
+          startEditNote={startEditNote}
+        />
       </div>
     </div>
   );
 }
-
 
 export default NotesPage;

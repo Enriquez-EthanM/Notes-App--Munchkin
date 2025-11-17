@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import org.springframework.lang.Nullable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 import lombok.Data;
@@ -27,6 +29,11 @@ public class NotesEntity {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    // NEW: store blockchain transaction hash
+    @Column(name = "tx_hash", nullable = true)
+    private String txHash;
+
     //Timestamp issue fix
     @PrePersist
     protected void onCreate() {
