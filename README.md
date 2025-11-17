@@ -20,16 +20,18 @@ cd NotesApp-Munchkin
 2. Backend Setup (Spring Boot)
 Open the backend project in your IDE (IntelliJ, VSCode, etc.)
 Configure application.properties with your MySQL credentials:
+```
 spring.datasource.url=jdbc:mysql://localhost:3306/notes_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
 spring.datasource.username=<your username>
 spring.datasource.password=<your password>
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
-
+```
 Build and run the backend:
+```
 ./mvnw spring-boot:run
-
+```
 3. Frontend Setup (React)
 cd frontend
 npm install
@@ -37,6 +39,7 @@ npm run dev
 
 
 MySQL Workbench DB Initialization(OPTIONAL)
+```
 CREATE DATABASE notes_db;
 USE notes_db;
 
@@ -48,4 +51,4 @@ CREATE TABLE notes (
     updated_at DATETIME NOT NULL,
     PRIMARY KEY (id)
 );
-
+```
