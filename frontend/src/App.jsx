@@ -77,7 +77,7 @@ function App() {
         style={{
           minHeight: '100vh',
           width: '100vw',
-          background: dark ? 'linear-gradient(135deg, #0b1220 0%, #0f172a 40%, #111827 100%)' : 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 30%, #fdf2f8 100%)',
+          background: dark ? 'linear-gradient(135deg, #0b1220 0%, #0f172a 40%, #111827 100%)' : 'linear-gradient(135deg, #f0f3ffff 0%, #1f4ce0ff 30%, #fdf2f8 100%)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -86,9 +86,9 @@ function App() {
       >
         <div
           style={{
-            width: '100%',
-            maxWidth: 1200,
-            minHeight: 600,
+            width: '90%',
+            // maxWidth: 1500,
+            // minHeight: 800,
             background: 'rgba(255,255,255,0.9)',
             borderRadius: 28,
             boxShadow: '0 20px 60px rgba(99,102,241,0.18)',
@@ -116,7 +116,7 @@ function App() {
             </div>
           </header>
 
-          <Navbar dark={dark} toggleDark={() => setDark(!dark)} />
+          <Navbar style={{ width: '90%' }} dark={dark} toggleDark={() => setDark(!dark)} />
 
           <main style={{ width: '100%', marginTop: '6px' }}>
             <Routes>

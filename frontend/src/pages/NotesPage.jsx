@@ -60,7 +60,7 @@ function NotesPage() {
   return (
     <div className="notes-page">
       <div className="notes-form-section">
-        <h2>{editingNote ? "Edit Note" : "Add a Note"}</h2>
+        <h2 className="note-title">{editingNote ? "Edit Note" : "Add a Note"}</h2>
         <NoteForm
           addNote={addNote}
           updateNoteProp={updateExistingNote}
