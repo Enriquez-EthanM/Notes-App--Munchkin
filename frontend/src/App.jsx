@@ -325,7 +325,7 @@ function App() {
                       fontSize: "0.95rem",
                       minWidth: 320,
                       boxShadow: "0 4px 10px rgba(99,102,241,0.06)",
-                      color: dark ? "#ffffff" : "#0f172a",
+                      color:"#0f172a",
                     }}
                 />
               </label>
@@ -345,7 +345,7 @@ function App() {
                       fontSize: "0.95rem",
                       width: 140,
                       boxShadow: "0 4px 10px rgba(99,102,241,0.06)",
-                      color: dark ? "#ffffff" : "#0f172a",
+                      color:"#0f172a",
                     }}
                 />
               </label>
