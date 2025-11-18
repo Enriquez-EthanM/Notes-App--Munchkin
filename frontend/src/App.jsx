@@ -1,3 +1,4 @@
+import { Blaze, Blockfrost, Core, WebWallet } from '@blaze-cardano/sdk';
 import NoteForm from './components/NoteForm';
 import NoteList from './components/NoteList';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -46,6 +47,10 @@ function App() {
   useEffect(() => {
     if (dark) document.body.classList.add('dark');
     else document.body.classList.remove('dark');
+
+    if(window.cardano) {
+      setWallets(Object.keys(window.cardano));
+    }
   }, [dark]);
 
   const addNote = async (note) => {
