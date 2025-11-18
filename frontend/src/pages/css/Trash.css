@@ -6,6 +6,6 @@
 .trash-item .meta h4 { margin: 0 0 6px 0; color: #0f172a; }
 .trash-item .meta p { margin: 0; color: #334155; }
 .actions { display: flex; gap: 8px; align-items: center; }
-.restore { padding: 8px 12px; border-radius: 10px; border: none; background: linear-gradient(135deg,#86efac,#22c55e); color: #0b0b0b; font-weight: 800; }
-.purge { padding: 8px 12px; border-radius: 10px; border: none; background: linear-gradient(135deg,#fda4af,#ef4444); color: #fff; font-weight: 800; }
+.restore { padding: 8px 12px; border-radius: 10px; border: none; background: linear-gradient(135deg,#f1f1f1,#bfbfbf); color: #0b0b0b; font-weight: 800; }
+.purge { padding: 8px 12px; border-radius: 10px; border: none; background: linear-gradient(135deg,#d3505f,#ef4444); color: #fff; font-weight: 800; }
 .empty { color: #94a3b8; } 

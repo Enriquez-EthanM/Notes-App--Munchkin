@@ -29,7 +29,7 @@ function Navbar({ dark, toggleDark }) {
       </div>
       <div className="nav-right">
         <button className="ghost-toggle" onClick={toggleDark}>{dark ? "Light" : "Dark"}</button>
-        <a className="cta" href="#" onClick={(e) => e.preventDefault()}>New</a>
+        
       </div>
     </nav>
   );

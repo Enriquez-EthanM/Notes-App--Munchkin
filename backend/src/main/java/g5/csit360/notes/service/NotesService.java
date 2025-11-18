@@ -14,7 +14,9 @@ public class NotesService {
     NotesRepository notesRepository;
 
     public List<NotesEntity> getAllNotes() {
-        return notesRepository.findAll();
+        return notesRepository.findAll().stream()
+                .filter(note -> !Boolean.TRUE.equals(note.getTrashed()))
+                .toList();
     }
 
     public NotesEntity getNoteById(int id) {

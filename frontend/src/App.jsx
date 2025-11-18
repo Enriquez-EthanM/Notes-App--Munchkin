@@ -1,17 +1,21 @@
-import NoteForm from "./components/NoteForm";
-import NoteList from "./components/NoteList";
-import React, { useEffect, useMemo, useState } from "react";
-import logo from "./assets/munchkin.png";
-import Navbar from "./components/Navbar";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import NotesPage from "./pages/NotesPage";
-import Dashboard from "./pages/Dashboard";
-import Favorites from "./pages/Favorites";
-import Trash from "./pages/Trash";
-import { Blaze, Blockfrost, Core, WebWallet } from "@blaze-cardano/sdk";
+import { Blaze, Blockfrost, Core, WebWallet } from '@blaze-cardano/sdk';
+import NoteForm from './components/NoteForm';
+import NoteList from './components/NoteList';
+import React, { useEffect, useMemo, useState } from 'react';
+import logo from './assets/munchkin.png';
+import Navbar from './components/Navbar';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import NotesPage from './pages/NotesPage';
+import Dashboard from './pages/Dashboard';
+import Favorites from './pages/Favorites';
+import Trash from './pages/Trash';
+import { getNotes, createNote as createNoteAPI, updateNote as updateNoteAPI, deleteNote as deleteNoteAPI } from './service/notesServices';
+import { toggleFavorite as toggleFavoriteAPI } from './service/favoriteServices';
+import { moveToTrash, restoreFromTrash, permanentlyDelete, getTrashedNotes } from './service/trashServices';
 
 function App() {
   const [notes, setNotes] = useState([]);
+  const [trashedNotes, setTrashedNotes] = useState([]);
   const [editingNote, setEditingNote] = useState(null);
   const [dark, setDark] = useState(false);
 
@@ -22,11 +26,34 @@ function App() {
   const [walletAddress, setWalletAddress] = useState('');
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState(0n);
-
   const provider = new Blockfrost({
-    network: 'cardano-preview',
-    projectId: import.meta.env.VITE_BLOCKFROST_PROJECT_ID,
-  });
+      network: 'cardano-preview',
+      projectId: import.meta.env.VITE_BLOCKFROST_PROJECT_ID,
+    });
+
+  // Load notes from backend
+  useEffect(() => {
+    loadNotes();
+    loadTrashedNotes();
+  }, []);
+
+  const loadNotes = async () => {
+    try {
+      const data = await getNotes();
+      setNotes(data);
+    } catch (error) {
+      console.error('Failed to load notes:', error);
+    }
+  };
+
+  const loadTrashedNotes = async () => {
+    try {
+      const data = await getTrashedNotes();
+      setTrashedNotes(data);
+    } catch (error) {
+      console.error('Failed to load trashed notes:', error);
+    }
+  };
 
   // Dark mode toggle
   useEffect(() => {
@@ -98,75 +125,112 @@ function App() {
   }
 
   // Notes management functions
-  const addNote = (note) => {
-    const now = Date.now();
-    const newNote = { id: now, createdAt: now, updatedAt: now, favorite: !!note.favorite, deletedAt: null, ...note };
-    setNotes([newNote, ...notes]);
+  const addNote = async (note) => {
+    try {
+      const newNote = await createNoteAPI(note);
+      setNotes([newNote, ...notes]);
+    } catch (error) {
+      console.error('Failed to create note:', error);
+    }
   };
 
-  const deleteNote = (id) => {
-    setNotes(notes.filter((note) => note.id !== id));
-    if (editingNote && editingNote.id === id) setEditingNote(null);
+  const deleteNote = async (id) => {
+    try {
+      await deleteNoteAPI(id);
+      setNotes(notes.filter((note) => note.id !== id));
+      if (editingNote && editingNote.id === id) setEditingNote(null);
+    } catch (error) {
+      console.error('Failed to delete note:', error);
+    }
   };
 
-  const confirmDelete = (id) => {
-    const ok = window.confirm("Move note to Recently Deleted?");
+  const confirmDelete = async (id) => {
+    const ok = window.confirm('Move note to Recently Deleted?');
     if (!ok) return;
-    setNotes(notes.map((n) => (n.id === id ? { ...n, deletedAt: Date.now() } : n)));
-    if (editingNote && editingNote.id === id) setEditingNote(null);
+    try {
+      const updated = await moveToTrash(id);
+      setNotes(notes.map(n => n.id === id ? updated : n));
+      if (editingNote && editingNote.id === id) setEditingNote(null);
+      // Reload to ensure fresh data
+      await loadNotes();
+      await loadTrashedNotes();
+    } catch (error) {
+      console.error('Failed to move to trash:', error);
+    }
   };
 
-  const purgeNote = (id) => {
-    const ok = window.confirm("Delete forever? This cannot be undone.");
+  const purgeNote = async (id) => {
+    const ok = window.confirm('Delete forever? This cannot be undone.');
     if (!ok) return;
-    setNotes(notes.filter((n) => n.id !== id));
+    try {
+      await permanentlyDelete(id);
+      setTrashedNotes(trashedNotes.filter(n => n.id !== id));
+    } catch (error) {
+      console.error('Failed to permanently delete:', error);
+    }
   };
 
-  const restoreNote = (id) => {
-    setNotes(notes.map((n) => (n.id === id ? { ...n, deletedAt: null } : n)));
+  const restoreNote = async (id) => {
+    try {
+      const restored = await restoreFromTrash(id);
+      setTrashedNotes(trashedNotes.filter(n => n.id !== id));
+      // Reload to ensure fresh data
+      await loadNotes();
+      await loadTrashedNotes();
+    } catch (error) {
+      console.error('Failed to restore note:', error);
+    }
   };
 
   const startEditNote = (note) => {
     setEditingNote(note);
   };
 
-  const updateNote = (updatedNote) => {
-    setNotes(notes.map((note) => (note.id === updatedNote.id ? { ...updatedNote, updatedAt: Date.now() } : note)));
-    setEditingNote(null);
+  const updateNote = async (updatedNote) => {
+    try {
+      const updated = await updateNoteAPI(updatedNote.id, updatedNote);
+      setNotes(notes.map((note) => note.id === updated.id ? updated : note));
+      setEditingNote(null);
+    } catch (error) {
+      console.error('Failed to update note:', error);
+    }
   };
 
-  const toggleFavorite = (id) => {
-    setNotes(notes.map((n) => (n.id === id ? { ...n, favorite: !n.favorite } : n)));
+  const toggleFavorite = async (id) => {
+    try {
+      const updated = await toggleFavoriteAPI(id);
+      setNotes(notes.map(n => n.id === id ? updated : n));
+      // Reload to ensure fresh data
+      await loadNotes();
+    } catch (error) {
+      console.error('Failed to toggle favorite:', error);
+    }
   };
 
-  const counts = useMemo(
-    () => ({
-      total: notes.filter((n) => !n.deletedAt).length,
-      favorites: notes.filter((n) => n.favorite && !n.deletedAt).length,
-      deleted: notes.filter((n) => !!n.deletedAt).length,
-    }),
-    [notes]
-  );
+  const counts = useMemo(() => ({
+    total: notes.length,
+    favorites: notes.filter(n => n.favorite).length,
+    deleted: trashedNotes.length,
+  }), [notes, trashedNotes]);
 
   return (
     <BrowserRouter>
       <div
         style={{
-          minHeight: "100vh",
-          width: "100vw",
-          background: dark ? "linear-gradient(135deg, #0b1220 0%, #0f172a 40%, #111827 100%)" : "linear-gradient(135deg, #eef2ff 0%, #e0e7ff 30%, #fdf2f8 100%)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontFamily: "Segoe UI, Arial, sans-serif",
+          minHeight: '100vh',
+          width: '100vw',
+          background: dark ? 'linear-gradient(135deg, #0b1220 0%, #0f172a 40%, #111827 100%)' : 'linear-gradient(135deg, #f0f3ffff 0%, #1f4ce0ff 30%, #fdf2f8 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontFamily: 'Segoe UI, Arial, sans-serif',
         }}
       >
         <div
           style={{
-            width: "100%",
-            maxWidth: 1200,
-            minHeight: 600,
-            background: "rgba(255,255,255,0.9)",
+            width: '90%',
+             minHeight: 600,
+            background: 'rgba(255,255,255,0.9)',
             borderRadius: 28,
             boxShadow: "0 20px 60px rgba(99,102,241,0.18)",
             padding: "2rem 2rem 2.2rem 2rem",
@@ -305,17 +369,16 @@ function App() {
               </button>
             </div>
           </div>
-          
-          <Navbar dark={dark} toggleDark={() => setDark(!dark)} />
+          <Navbar style={{ width: '90%' }} dark={dark} toggleDark={() => setDark(!dark)} />
 
           <main style={{ width: "100%", marginTop: "6px" }}>
             <Routes>
-              <Route path="/" element={<Dashboard notes={notes} />} />
+              <Route path="/" element={<Dashboard notes={notes} trashedNotes={trashedNotes} />} />
               <Route
                 path="/notes"
                 element={
                   <NotesPage
-                    notes={notes.filter((n) => !n.deletedAt)}
+                    notes={notes}
                     addNote={addNote}
                     deleteNote={deleteNote}
                     editingNote={editingNote}
@@ -326,8 +389,21 @@ function App() {
                   />
                 }
               />
-              <Route path="/favorites" element={<Favorites notes={notes} deleteNote={deleteNote} startEditNote={startEditNote} toggleFavorite={toggleFavorite} />} />
-              <Route path="/trash" element={<Trash notes={notes} restoreNote={restoreNote} purgeNote={purgeNote} />} />
+              <Route
+                path="/favorites"
+                element={
+                  <Favorites
+                    notes={notes}
+                    deleteNote={deleteNote}
+                    startEditNote={startEditNote}
+                    toggleFavorite={toggleFavorite}
+                  />
+                }
+              />
+              <Route
+                path="/trash"
+                element={<Trash notes={trashedNotes} restoreNote={restoreNote} purgeNote={purgeNote} />}
+              />
             </Routes>
           </main>
 
