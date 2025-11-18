@@ -4,18 +4,5 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    nodePolyfills({
-      // Whether to polyfill `node:` protocol imports.
-      protocolImports: true,
-      globals: {
-        process: true,
-        Buffer: true,
-      },
-    }),
-  ],
-  define: {
-    global: 'globalThis',
-  },
+  plugins: [react(), nodePolyfills()],
 })
