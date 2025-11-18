@@ -152,8 +152,7 @@ function App() {
         <div
           style={{
             width: '90%',
-            // maxWidth: 1500,
-            // minHeight: 800,
+             minHeight: 600,
             background: 'rgba(255,255,255,0.9)',
             borderRadius: 28,
             boxShadow: '0 20px 60px rgba(99,102,241,0.18)',

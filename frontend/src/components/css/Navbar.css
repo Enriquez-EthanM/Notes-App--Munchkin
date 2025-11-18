@@ -16,7 +16,7 @@
 
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand-dot { width: 12px; height: 12px; border-radius: 50%; background: linear-gradient(135deg,#60a5fa,#8b5cf6); box-shadow: 0 0 0 3px rgba(99,102,241,0.18); }
-.brand-text { font-weight: 800; color: #4338ca; letter-spacing: .3px; }
+.brand-text { font-weight: 800; color: #000000; letter-spacing: .3px; }
 
 .nav-links { display: flex; list-style: none; margin: 0; padding: 0; gap: 10px; }
 .nav-links a {
@@ -49,7 +49,7 @@
   border-radius: 10px;
   border: none;
   background: rgba(99,102,241,0.1);
-  color: #4338ca;
+  color: #000000;
   font-weight: 800;
   cursor: pointer;
   max-width: 100%;
