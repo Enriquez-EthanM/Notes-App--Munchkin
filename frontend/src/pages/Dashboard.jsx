@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import "./css/Dashboard.css";
 
-function Dashboard({ notes }) {
-  const total = notes.filter(n => !n.deletedAt).length;
-  const favorites = notes.filter(n => n.favorite && !n.deletedAt).length;
-  const deleted = notes.filter(n => !!n.deletedAt).length;
-  const recent = [...notes].filter(n => !n.deletedAt).slice(-3).reverse();
+function Dashboard({ notes, trashedNotes }) {
+  const total = notes.length;
+  const favorites = notes.filter(n => n.favorite).length;
+  const deleted = trashedNotes.length;
+  const recent = [...notes].slice(-3).reverse();
 
   return (
     <div className="dashboard">
@@ -15,7 +15,6 @@ function Dashboard({ notes }) {
           <p>Capture ideas fast and keep them beautifully organized.</p>
           <div className="hero-actions">
             <Link to="/notes" className="primary">Create a Note</Link>
-            <a href="#" className="ghost" onClick={(e)=>e.preventDefault()}>Import</a>
           </div>
         </div>
       </section>

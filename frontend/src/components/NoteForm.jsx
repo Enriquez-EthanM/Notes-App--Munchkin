@@ -23,7 +23,7 @@ function NoteForm({ addNote, updateNoteProp, editingNote }) {
     };
 
     if (editingNote) {
-      updateNoteProp(editingNote.id, note);
+      updateNoteProp({ ...editingNote, ...note });
     } else {
       addNote(note);
     }
