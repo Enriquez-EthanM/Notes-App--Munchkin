@@ -86,13 +86,48 @@ function App() {
 
         const tx = await blaze
           .newTransaction()
-          .payLovelace(Core.Address.fromBech32(recipient), amount)
-          .complete();
-          console.log('Transaction built: ', tx.toCbor());
-          const signedTx = await blaze.signTransaction(tx);
-          console.log('Transaction signed: ', signedTx.toCbor());
-          const txHash = await blaze.provider.postTransactionToChain(signedTx);
-          console.log('Transaction submitted with hash:', txHash);
+          .payLovelace(Core.Address.fromBech32(recipient), amount);
+        
+        const metadata = new Map();
+        const label = 91975n
+        const metadatumMap = new Core.MetadatumMap();
+
+        metadatumMap.insert(
+          Core.Metadatum.newText("action"),
+          Core.Metadatum.newText(action)
+        );
+
+        metadatumMap.insert(
+          Core.Metadatum.newText("note"),
+          formatContent(noteContent || "") // FUNCTION DEFINITION IS EXPLAINED AFTER THIS CODE BLOCK
+        );
+
+        metadatumMap.insert(
+          Core.Metadatum.newText("created_at"),
+          Core.Metadatum.newText(new Date().toISOString())
+        );
+
+        const metadatum = Core.Metadatum.newMap(metadatumMap);
+        metadata.set(label, metadatum);
+        const finalMetadata = new Core.Metadata(metadata);
+
+        tx.setMetadata(finalMetadata);
+
+        console.log('Metadata inserted: ', formatContent(finalMetadata || ""));
+
+        // insert noteId here?
+
+        const completedTx = await tx.complete();
+
+        console.log('Transaction built: ', tx.toCbor());
+
+        const signedTx = await blaze.signTransaction(tx);
+
+        console.log('Transaction signed: ', signedTx.toCbor());
+
+        const txHash = await blaze.provider.postTransactionToChain(signedTx);
+
+        console.log('Transaction submitted with hash:', txHash);
       } catch (error) {
         console.error('Error creating transaction:', error);
       }
@@ -123,6 +158,29 @@ function App() {
   const handleAmountChange = (event) => {
     setAmount(BigInt(event.target.value));
   }
+
+  // HELPER FUNCTION: FORMAT CONTENT
+  // PURPOSE: CARDANO METADATA STRINGS CANNOT EXCEED 64 BYTES.
+  // THIS FUNCTION CHECKS THE LENGTH. IF IT IS SHORT, IT RETURNS A SIMPLE TEXT.
+  // IF IT IS LONG, IT SPLITS THE TEXT INTO CHUNKS AND RETURNS A LIST.
+
+  const formatContent = (content) => {
+    // CASE 1: SHORT STRING (FITS IN ONE CHUNK)
+    if (content.length <= 64) {
+      return Core.Metadatum.newText(content);
+    }
+
+    // CASE 2: LONG STRING (NEEDS SPLITTING)
+    // REGEX SPLITS THE STRING EVERY 64 CHARACTERS
+    const chunks = content.match(/.{1,64}/g) || [];
+    const list = new Core.MetadatumList();
+    
+    chunks.forEach(chunk => {
+      list.add(Core.Metadatum.newText(chunk));
+    });
+
+    return Core.Metadatum.newList(list);
+  };
 
   // Notes management functions
   const addNote = async (note) => {
