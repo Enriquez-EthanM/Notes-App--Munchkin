@@ -75,7 +75,7 @@ function App() {
   };
 
   const handleSubmitTransaction = async () => {
-    if (walletApi) { 
+    if (walletApi && editingNote) { 
       try {
         const wallet = new WebWallet(walletApi);
         const blaze = await Blaze.from(provider, wallet);
@@ -92,14 +92,29 @@ function App() {
         const label = 91975n
         const metadatumMap = new Core.MetadatumMap();
 
+        const action = 'create_note';
+        const noteContent = editingNote.content;
+        const formattedContent = formatContent(noteContent || "")
+
         metadatumMap.insert(
           Core.Metadatum.newText("action"),
           Core.Metadatum.newText(action)
         );
 
         metadatumMap.insert(
+          Core.Metadatum.newText("note_title"),
+          Core.Metadatum.newText(editingNote.title)
+        );
+
+        metadatumMap.insert(
           Core.Metadatum.newText("note"),
-          formatContent(noteContent || "") // FUNCTION DEFINITION IS EXPLAINED AFTER THIS CODE BLOCK
+          formattedNoteContent
+        );
+
+        // is this the note id???
+        metadatumMap.insert(
+          Core.Metadatum.newText("note_id"),
+          Core.Metadatum.newText(String(editingNote.id))
         );
 
         metadatumMap.insert(
@@ -115,8 +130,6 @@ function App() {
 
         console.log('Metadata inserted: ', formatContent(finalMetadata || ""));
 
-        // insert noteId here?
-
         const completedTx = await tx.complete();
 
         console.log('Transaction built: ', tx.toCbor());
@@ -130,6 +143,8 @@ function App() {
         console.log('Transaction submitted with hash:', txHash);
       } catch (error) {
         console.error('Error creating transaction:', error);
+      } else {
+        console.error('No wallet connected or note selected');
       }
     }
   }
